@@ -5,6 +5,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MongooseModule } from '@nestjs/mongoose';
 import config from 'src/config';
 import { RedisModule } from 'src/modules/redis/redis.module';
+import {
+  RefreshToken,
+  RefreshTokenSchema,
+} from 'src/schemas/refresh-token.schema';
 import { User, UserSchema } from 'src/schemas/user.schema';
 
 @Module({
@@ -17,7 +21,10 @@ import { User, UserSchema } from 'src/schemas/user.schema';
       },
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: RefreshToken.name, schema: RefreshTokenSchema },
+    ]),
 
     BullModule.forRootAsync({
       imports: [ConfigModule],

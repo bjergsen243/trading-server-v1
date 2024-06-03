@@ -33,3 +33,7 @@ export function safeToString(json: any): string {
     return util.inspect(json);
   }
 }
+
+export function nowInSeconds() {
+  return ~~(Date.now() / 1000);
+}

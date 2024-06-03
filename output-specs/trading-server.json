@@ -1,6 +1,50 @@
 {
   "openapi": "3.0.0",
-  "paths": {},
+  "paths": {
+    "/api/auth/signin": {
+      "post": {
+        "operationId": "public.users.signIn",
+        "summary": "Sign in by email",
+        "description": "Sign in by email",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignInDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    }
+  },
   "info": {
     "title": "Trading Server",
     "description": "Swagger documentation for Trading Server",
@@ -17,6 +61,100 @@
         "type": "http"
       }
     },
-    "schemas": {}
+    "schemas": {
+      "ErrorMessageDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 400
+          },
+          "message": {
+            "example": [
+              "Error message 1",
+              "Error message 2"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "error"
+        ]
+      },
+      "UnauthorizedResponseDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 401
+          },
+          "message": {
+            "example": [
+              "Unauthorized"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "error": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "error"
+        ]
+      },
+      "SignInDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "thanhsondeptrai243@gmail.com",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "example": "password",
+            "description": "User password"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "TokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRBZGRyZXNzIjoiMHhiZTdiMTNmMTgyZWVhMjY4ODJiZWZhMzA5NzZhODFiY2FjNjQ2ODExIiwidWlkIjoiZ1FSaC0yMFdkaW9SeHkiLCJpYXQiOjE3MDI1MjMyOTgsImV4cCI6MTcwMjUyNjg5OH0.P4vUTxrJBchIu8TK3sxyA2Lhq6QZyU-KxFUkU7wMkkw",
+            "description": "Access Token"
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRBZGRyZXNzIjoiMHhiZTdiMTNmMTgyZWVhMjY4ODJiZWZhMzA5NzZhODFiY2FjNjQ2ODExIiwidWlkIjoiZ1FSaC0yMFdkaW9SeHkiLCJpYXQiOjE3MDI1MjMyOTgsImV4cCI6MTcwNTExNTI5OH0.4-rPMoH0ZM9HmDIiZKPos0Xvq3BnxS4zxJO7lEBl8hI",
+            "description": "Refresh Token"
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken"
+        ]
+      }
+    }
   }
 }
