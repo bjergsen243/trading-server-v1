@@ -153,64 +153,6 @@
         ]
       }
     },
-    "/api/users/profile/username": {
-      "put": {
-        "operationId": "updateMyProfile",
-        "summary": "Update my username",
-        "description": "Update my username",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateUsernameRequestDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserProfileResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorMessageDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "UNAUTHORIZED",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UnauthorizedResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "users"
-        ],
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/api/auth/signin": {
       "post": {
         "operationId": "public.users.signIn",
@@ -334,6 +276,64 @@
           }
         ]
       }
+    },
+    "/api/payment/account": {
+      "post": {
+        "operationId": "Create new payment account",
+        "summary": "Create new payment account",
+        "description": "Create new payment account",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentAccountRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentAccountResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "payment"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -430,19 +430,6 @@
           "username"
         ]
       },
-      "UpdateUsernameRequestDto": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "example": "username_123",
-            "description": "username"
-          }
-        },
-        "required": [
-          "username"
-        ]
-      },
       "SignInDto": {
         "type": "object",
         "properties": {
@@ -505,6 +492,92 @@
         },
         "required": [
           "message"
+        ]
+      },
+      "CreatePaymentAccountRequestDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "665d9073c420b2b3e4927c78"
+          },
+          "id": {
+            "type": "string",
+            "example": "665d9073c420b2b3e4927c78"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "credit",
+              "debit",
+              "visa"
+            ],
+            "example": "credit"
+          },
+          "balance": {
+            "type": "number",
+            "example": 100
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "vnd",
+              "usd",
+              "eur"
+            ],
+            "example": "vnd"
+          }
+        },
+        "required": [
+          "userId",
+          "id",
+          "type",
+          "balance",
+          "currency"
+        ]
+      },
+      "PaymentAccountResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User id"
+          },
+          "id": {
+            "type": "string",
+            "description": "Payment account id"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "credit",
+              "debit",
+              "visa"
+            ],
+            "description": "Type of wallet",
+            "example": "credit"
+          },
+          "balance": {
+            "type": "number",
+            "description": "Balance of this account"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "vnd",
+              "usd",
+              "eur"
+            ],
+            "description": "Currency of this account",
+            "example": "vnd"
+          }
+        },
+        "required": [
+          "userId",
+          "id",
+          "type",
+          "balance",
+          "currency"
         ]
       }
     }

@@ -6,6 +6,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import config from 'src/config';
 import { RedisModule } from 'src/modules/redis/redis.module';
 import {
+  PaymentAccount,
+  PaymentAccountSchema,
+} from 'src/schemas/payment-account.schema';
+import {
+  PaymentHistory,
+  PaymentHistorySchema,
+} from 'src/schemas/payment-history.schema';
+import {
   RefreshToken,
   RefreshTokenSchema,
 } from 'src/schemas/refresh-token.schema';
@@ -24,6 +32,8 @@ import { User, UserSchema } from 'src/schemas/user.schema';
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
       { name: RefreshToken.name, schema: RefreshTokenSchema },
+      { name: PaymentAccount.name, schema: PaymentAccountSchema },
+      { name: PaymentHistory.name, schema: PaymentHistorySchema },
     ]),
 
     BullModule.forRootAsync({

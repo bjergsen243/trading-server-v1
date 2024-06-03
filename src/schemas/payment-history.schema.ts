@@ -3,7 +3,7 @@ import * as MongoosePaginate from 'mongoose-paginate-v2';
 import {
   ECurrencyType,
   EPaymentStatus,
-  EPaymentType,
+  EPaymentMethod,
 } from 'src/shared/enum/payment.enum';
 
 export type PaymentHistoryDocument = PaymentHistory & Document;
@@ -14,8 +14,8 @@ export class PaymentHistory {
     Object.assign(this, paymentHistory);
   }
 
-  @Prop({ required: true })
-  from: string;
+  @Prop({ name: 'account_id', required: true })
+  accountId: string;
 
   @Prop({ required: true })
   to: string;
@@ -26,8 +26,8 @@ export class PaymentHistory {
   @Prop({ enum: EPaymentStatus, default: EPaymentStatus.WAITING })
   status: EPaymentStatus;
 
-  @Prop({ enum: EPaymentType, default: null })
-  type: EPaymentType;
+  @Prop({ enum: EPaymentMethod, default: null })
+  type: EPaymentMethod;
 
   @Prop({ enum: ECurrencyType, default: ECurrencyType.VND })
   currency: ECurrencyType;

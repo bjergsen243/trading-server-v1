@@ -13,6 +13,9 @@ export class PaymentAccount {
   @Prop({ name: 'user_id', required: true })
   userId: string;
 
+  @Prop({ unique: true, required: true })
+  id: string;
+
   @Prop({ enum: EWalletType, default: EWalletType.CREDIT })
   type: EWalletType;
 

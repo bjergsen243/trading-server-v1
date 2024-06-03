@@ -11,7 +11,7 @@ export enum EWalletType {
   VISA = 'visa',
 }
 
-export enum EPaymentType {
+export enum EPaymentMethod {
   WITHDRAW = 'withdraw',
   DEPOSIT = 'deposit',
 }
