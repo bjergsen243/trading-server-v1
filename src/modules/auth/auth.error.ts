@@ -35,3 +35,12 @@ export class WrongPasswordError extends UnauthorizedException {
     });
   }
 }
+
+export class RefreshTokenExpiredError extends UnauthorizedException {
+  constructor() {
+    super({
+      error: 'REFRESH_TOKEN_EXPIRED',
+      message: 'Refresh token expired.',
+    });
+  }
+}

@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectModel } from '@nestjs/mongoose';
-import { UserService } from '../user/services';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
 import {
   RefreshToken,
   RefreshTokenDocument,
 } from 'src/schemas/refresh-token.schema';
-import { Model } from 'mongoose';
-import { AuthPayloadDto, SignInDto } from './dtos/request.dto';
-import { IJwtPayload, IJwtToken } from './auth.interface';
+import { nowInSeconds } from 'src/shared/utils/utils';
+import { UserService } from '../user/services';
 import {
   JwtPayloadInvalidError,
   JwtTokenExpiredError,
   RefreshPayloadInvalidError,
+  RefreshTokenExpiredError,
   WrongPasswordError,
 } from './auth.error';
-import { nowInSeconds } from 'src/shared/utils/utils';
-import * as bcrypt from 'bcrypt';
+import { IJwtPayload, IJwtToken } from './auth.interface';
+import { AuthPayloadDto, SignInDto } from './dtos/request.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +35,7 @@ export class AuthService {
 
     let user = await this.userService.getUserByEmail(email);
 
+    // check existed user
     if (!user) {
       user = await this.userService.create(signInDto);
     }
@@ -176,5 +178,41 @@ export class AuthService {
     hashedPassword: string,
   ): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
+  }
+
+  async logout(email: string): Promise<string | Error> {
+    await this.refreshTokenModel.findOneAndDelete({
+      email,
+    });
+
+    return 'Logged out successfully.';
+  }
+
+  async refreshToken(oldRefreshToken: string): Promise<IJwtToken | Error> {
+    let payload: IJwtPayload;
+    try {
+      payload = await this.jwtService.verify(oldRefreshToken, {
+        secret: this.configService.get('auth.refreshToken'),
+        ignoreExpiration: true,
+      });
+    } catch (err) {
+      throw new RefreshPayloadInvalidError();
+    }
+
+    const { exp, iat, ..._payload } = payload;
+    if (exp < Math.floor(Date.now() / 1000)) {
+      throw new RefreshTokenExpiredError();
+    }
+
+    const accessToken = await this.createAccessToken(_payload);
+    const refreshToken = await this.createRefreshToken(
+      _payload,
+      oldRefreshToken,
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 }

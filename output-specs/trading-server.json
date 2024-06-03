@@ -43,6 +43,87 @@
           "auth"
         ]
       }
+    },
+    "/api/auth/refresh-token": {
+      "post": {
+        "operationId": "public.users.refreshToken",
+        "summary": "Refresh for new access token",
+        "description": "Refresh for new access token",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "logout",
+        "summary": "User logout",
+        "description": "User logout",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -141,18 +222,44 @@
         "properties": {
           "accessToken": {
             "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRBZGRyZXNzIjoiMHhiZTdiMTNmMTgyZWVhMjY4ODJiZWZhMzA5NzZhODFiY2FjNjQ2ODExIiwidWlkIjoiZ1FSaC0yMFdkaW9SeHkiLCJpYXQiOjE3MDI1MjMyOTgsImV4cCI6MTcwMjUyNjg5OH0.P4vUTxrJBchIu8TK3sxyA2Lhq6QZyU-KxFUkU7wMkkw",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJFZmF1YVVsb3VDRDk0eCIsImVtYWlsIjoidGhhbmhzb25kZXB0cmFpMjQzQGdtYWlsLmNvbSIsImlhdCI6MTcxNzQwNDQ4OCwiZXhwIjoxNzE3NDkwODg4fQ.n_EZkYAK5Ou1hHLDXZktrP2uV89R9DXREcO9CwM9rhs",
             "description": "Access Token"
           },
           "refreshToken": {
             "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3YWxsZXRBZGRyZXNzIjoiMHhiZTdiMTNmMTgyZWVhMjY4ODJiZWZhMzA5NzZhODFiY2FjNjQ2ODExIiwidWlkIjoiZ1FSaC0yMFdkaW9SeHkiLCJpYXQiOjE3MDI1MjMyOTgsImV4cCI6MTcwNTExNTI5OH0.4-rPMoH0ZM9HmDIiZKPos0Xvq3BnxS4zxJO7lEBl8hI",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJFZmF1YVVsb3VDRDk0eCIsImVtYWlsIjoidGhhbmhzb25kZXB0cmFpMjQzQGdtYWlsLmNvbSIsImlhdCI6MTcxNzQwNDQ4OCwiZXhwIjoxNzE5OTk2NDg4fQ.mGEFDhxA_N1mwdzUvapamOBCGvb3uTE9aHy-yfbWHiA",
             "description": "Refresh Token"
           }
         },
         "required": [
           "accessToken",
           "refreshToken"
+        ]
+      },
+      "RefreshTokenRequestDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "description": "Refresh Token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJFZmF1YVVsb3VDRDk0eCIsImVtYWlsIjoidGhhbmhzb25kZXB0cmFpMjQzQGdtYWlsLmNvbSIsImlhdCI6MTcxNzQwNDQ4OCwiZXhwIjoxNzE5OTk2NDg4fQ.mGEFDhxA_N1mwdzUvapamOBCGvb3uTE9aHy-yfbWHiA"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "SuccessResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Successful",
+            "description": "message"
+          }
+        },
+        "required": [
+          "message"
         ]
       }
     }
