@@ -4,6 +4,7 @@ import {
   PaginateModel,
   QueryOptions,
   SaveOptions,
+  UpdateQuery,
 } from 'mongoose';
 
 export abstract class BaseRepository<T> {
@@ -29,5 +30,13 @@ export abstract class BaseRepository<T> {
     options?: QueryOptions,
   ): Promise<T & Document> {
     return this.model.findOne(filter, projection, options).lean();
+  }
+
+  async findOneAndUpdate(
+    filter?: FilterQuery<T & Document>,
+    update?: UpdateQuery<T & Document>,
+    options?: QueryOptions | null,
+  ): Promise<T & Document> {
+    return await this.model.findOneAndUpdate(filter, update, options);
   }
 }
