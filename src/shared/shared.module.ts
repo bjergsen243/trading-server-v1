@@ -1,11 +1,11 @@
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MongooseModule } from '@nestjs/mongoose';
-import config from 'config';
+import config from 'src/config';
 import { RedisModule } from 'src/modules/redis/redis.module';
 import { User, UserSchema } from 'src/schemas/user.schema';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
