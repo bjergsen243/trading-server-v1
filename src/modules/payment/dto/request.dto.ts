@@ -1,12 +1,5 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
-import {
-  ECurrencyType,
-  EPaymentMethod,
-  EPaymentStatus,
-  EWalletType,
-} from 'src/shared/enum/payment.enum';
-import { IPaymentAccount } from '../payment.interface';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Exclude, Expose, Transform } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
@@ -16,7 +9,14 @@ import {
   IsOptional,
   Min,
 } from 'class-validator';
+import {
+  ECurrencyType,
+  EPaymentMethod,
+  EPaymentStatus,
+  EWalletType,
+} from 'src/shared/enum/payment.enum';
 import { getEnumValues } from 'src/shared/helpers';
+import { IPaymentAccount, IPaymentHistory } from '../payment.interface';
 
 @Exclude()
 export class CreatePaymentAccountRequestDto
@@ -114,4 +114,25 @@ export class GetTxsFilter {
   @IsArray()
   @IsEnum(ECurrencyType, { each: true })
   currency?: ECurrencyType[];
+}
+
+@Exclude()
+export class CreatePaymentRequestDto implements Partial<IPaymentHistory> {
+  @Expose()
+  @ApiProperty({
+    type: String,
+    example: '665d9073c420b2b3e4927c78',
+  })
+  accountId: string;
+
+  @Expose()
+  @ApiProperty({
+    type: Number,
+    example: 100,
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  @IsInt()
+  @Min(0)
+  amount: number;
 }

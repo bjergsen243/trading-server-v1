@@ -12,7 +12,7 @@ import { UpdateUsernameRequestDto } from '../dto/request.dto';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async create(signInDto: SignInDto) {
+  async create(signInDto: SignInDto): Promise<UserDocument> {
     const id = nanoid(NANOID_LENGTH);
     return await this.userRepository.create({
       id,

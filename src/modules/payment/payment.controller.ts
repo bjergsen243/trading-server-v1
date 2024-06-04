@@ -26,6 +26,7 @@ import { IPagination } from 'src/shared/shared.interface';
 import { AuthRequest, JWT_STRATEGY } from '../auth';
 import {
   CreatePaymentAccountRequestDto,
+  CreatePaymentRequestDto,
   GetAccountsFilter,
   GetTxsFilter,
 } from './dto/request.dto';
@@ -33,6 +34,7 @@ import {
   GetMyAccountsResponseDto,
   GetMyTxsResponseDto,
   PaymentAccountResponseDto,
+  PaymentHistoryResponseDto,
 } from './dto/response.dto';
 import { PaymentAccountService, PaymentHistoryService } from './services';
 
@@ -116,42 +118,40 @@ export class PaymentController {
   }
 
   // Send money
-  // @Post('/send')
-  // @ApiOperation({
-  //   operationId: 'sendPayment',
-  //   summary: 'Send payment',
-  //   description: 'Send payment',
-  // })
-  // @ApiOkResponse({ description: 'Successful', type: PaymentHistoryResponseDto })
-  // async sendPayment(
-  //   @Req() req: AuthRequest,
-  //   @Body() reqBody: SendPaymentRequestDto,
-  // ) {
-  //   const newPaymentAccount =
-  //     await this.paymentAccountService.sendPayment(
-  //       req.user?.uid,
-  //       reqBody,
-  //     );
-  //   return plainToClass(PaymentHistoryResponseDto, newPaymentAccount);
-  // }
+  @Post('/send')
+  @ApiOperation({
+    operationId: 'sendPayment',
+    summary: 'Send payment',
+    description: 'Send payment',
+  })
+  @ApiOkResponse({ description: 'Successful', type: PaymentHistoryResponseDto })
+  async sendPayment(
+    @Req() req: AuthRequest,
+    @Body() reqBody: CreatePaymentRequestDto,
+  ) {
+    const payment = await this.paymentAccountService.sendPayment(
+      req.user?.uid,
+      reqBody,
+    );
+    return plainToClass(PaymentHistoryResponseDto, payment);
+  }
 
-  // // withdraw money
-  // @Post('/withdraw')
-  // @ApiOperation({
-  //   operationId: 'withdrawPayment',
-  //   summary: 'Withdraw payment',
-  //   description: 'Withdraw payment',
-  // })
-  // @ApiOkResponse({ description: 'Successful', type: PaymentHistoryResponseDto })
-  // async withdrawPayment(
-  //   @Req() req: AuthRequest,
-  //   @Body() reqBody: WithdrawPaymentRequestDto,
-  // ) {
-  //   const newPaymentAccount =
-  //     await this.paymentAccountService.withdrawPayment(
-  //       req.user?.uid,
-  //       reqBody,
-  //     );
-  //   return plainToClass(PaymentHistoryResponseDto, newPaymentAccount);
-  // }
+  // withdraw money
+  @Post('/withdraw')
+  @ApiOperation({
+    operationId: 'withdrawPayment',
+    summary: 'Withdraw payment',
+    description: 'Withdraw payment',
+  })
+  @ApiOkResponse({ description: 'Successful', type: PaymentHistoryResponseDto })
+  async withdrawPayment(
+    @Req() req: AuthRequest,
+    @Body() reqBody: CreatePaymentRequestDto,
+  ) {
+    const payment = await this.paymentAccountService.withdrawPayment(
+      req.user?.uid,
+      reqBody,
+    );
+    return plainToClass(PaymentHistoryResponseDto, payment);
+  }
 }
