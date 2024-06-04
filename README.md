@@ -97,6 +97,8 @@ $ npm run test:cov
 
 [] Cache Transaction through Redis
 
+[] Write Unit Test
+
 ## License
 
 Trading Server is [MIT licensed](LICENSE).
