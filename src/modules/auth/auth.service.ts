@@ -41,7 +41,10 @@ export class AuthService {
     }
 
     // check validate password
-    let validatePassword = await this.validatePassword(password, user.password);
+    const validatePassword = await this.validatePassword(
+      password,
+      user.password,
+    );
     if (!validatePassword) {
       throw new WrongPasswordError();
     }

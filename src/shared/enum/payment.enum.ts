@@ -13,7 +13,7 @@ export enum EWalletType {
 
 export enum EPaymentMethod {
   WITHDRAW = 'withdraw',
-  DEPOSIT = 'deposit',
+  SEND = 'send',
 }
 
 export enum ECurrencyType {

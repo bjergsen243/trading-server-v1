@@ -277,7 +277,7 @@
         ]
       }
     },
-    "/api/payment/account": {
+    "/api/payment/create-account": {
       "post": {
         "operationId": "Create new payment account",
         "summary": "Create new payment account",
@@ -300,6 +300,225 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PaymentAccountResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "payment"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/payment/my-accounts": {
+      "get": {
+        "operationId": "getMyPaymentAccounts",
+        "summary": "Get my payment accounts.",
+        "description": "Get my payment accounts.",
+        "parameters": [
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Type of wallet",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "credit",
+                  "debit",
+                  "visa"
+                ]
+              }
+            }
+          },
+          {
+            "name": "currency",
+            "required": false,
+            "in": "query",
+            "description": "Type of currency",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "vnd",
+                  "usd",
+                  "eur"
+                ]
+              }
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number, default: 1",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number items per page, default: 20",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMyAccountsResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessageDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnauthorizedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "payment"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/payment/my-txs": {
+      "get": {
+        "operationId": "getMyTransactions",
+        "summary": "Get my transactions.",
+        "description": "Get my transactions.",
+        "parameters": [
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Transaction status",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "waiting",
+                  "succeed",
+                  "failed",
+                  "reverted"
+                ]
+              }
+            }
+          },
+          {
+            "name": "type",
+            "required": false,
+            "in": "query",
+            "description": "Type of payment",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "withdraw",
+                  "send"
+                ]
+              }
+            }
+          },
+          {
+            "name": "currency",
+            "required": false,
+            "in": "query",
+            "description": "Type of currency",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "vnd",
+                  "usd",
+                  "eur"
+                ]
+              }
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Page number, default: 1",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Number items per page, default: 20",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMyTxsResponseDto"
                 }
               }
             }
@@ -501,10 +720,6 @@
             "type": "string",
             "example": "665d9073c420b2b3e4927c78"
           },
-          "id": {
-            "type": "string",
-            "example": "665d9073c420b2b3e4927c78"
-          },
           "type": {
             "type": "string",
             "enum": [
@@ -530,7 +745,6 @@
         },
         "required": [
           "userId",
-          "id",
           "type",
           "balance",
           "currency"
@@ -578,6 +792,188 @@
           "type",
           "balance",
           "currency"
+        ]
+      },
+      "GetMyAccountsResponseDto": {
+        "type": "object",
+        "properties": {
+          "pagingCounter": {
+            "type": "number",
+            "example": 1,
+            "description": "The starting index/serial/chronological number of first document in current page."
+          },
+          "offset": {
+            "type": "number",
+            "example": 2,
+            "description": "Offset"
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "example": false
+          },
+          "hasPrevPage": {
+            "type": "boolean",
+            "example": true
+          },
+          "totalDocs": {
+            "type": "number",
+            "example": 10,
+            "description": "Total number of documents in collection that matched a query."
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 1,
+            "description": "Total number of pages."
+          },
+          "limit": {
+            "type": "number",
+            "example": 10,
+            "description": "Number of documents per page."
+          },
+          "page": {
+            "type": "number",
+            "example": 1,
+            "description": "Current page number."
+          },
+          "docs": {
+            "description": "Array of documents",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentAccountResponseDto"
+            }
+          }
+        },
+        "required": [
+          "pagingCounter",
+          "offset",
+          "hasNextPage",
+          "hasPrevPage",
+          "totalDocs",
+          "totalPages",
+          "limit",
+          "page",
+          "docs"
+        ]
+      },
+      "PaymentHistoryResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "User id"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "Account id"
+          },
+          "id": {
+            "type": "string",
+            "description": "Transaction id"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "withdraw",
+              "send"
+            ],
+            "description": "Type of transaction",
+            "example": "send"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "waiting",
+              "succeed",
+              "failed",
+              "reverted"
+            ],
+            "description": "Status of transaction",
+            "example": "waiting"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Amount of this transaction"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "vnd",
+              "usd",
+              "eur"
+            ],
+            "description": "Currency of this transaction",
+            "example": "vnd"
+          }
+        },
+        "required": [
+          "userId",
+          "accountId",
+          "id",
+          "type",
+          "status",
+          "amount",
+          "currency"
+        ]
+      },
+      "GetMyTxsResponseDto": {
+        "type": "object",
+        "properties": {
+          "pagingCounter": {
+            "type": "number",
+            "example": 1,
+            "description": "The starting index/serial/chronological number of first document in current page."
+          },
+          "offset": {
+            "type": "number",
+            "example": 2,
+            "description": "Offset"
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "example": false
+          },
+          "hasPrevPage": {
+            "type": "boolean",
+            "example": true
+          },
+          "totalDocs": {
+            "type": "number",
+            "example": 10,
+            "description": "Total number of documents in collection that matched a query."
+          },
+          "totalPages": {
+            "type": "number",
+            "example": 1,
+            "description": "Total number of pages."
+          },
+          "limit": {
+            "type": "number",
+            "example": 10,
+            "description": "Number of documents per page."
+          },
+          "page": {
+            "type": "number",
+            "example": 1,
+            "description": "Current page number."
+          },
+          "docs": {
+            "description": "Array of documents",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentHistoryResponseDto"
+            }
+          }
+        },
+        "required": [
+          "pagingCounter",
+          "offset",
+          "hasNextPage",
+          "hasPrevPage",
+          "totalDocs",
+          "totalPages",
+          "limit",
+          "page",
+          "docs"
         ]
       }
     }

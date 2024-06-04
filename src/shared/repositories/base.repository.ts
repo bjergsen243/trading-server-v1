@@ -2,6 +2,7 @@ import {
   FilterQuery,
   Model,
   PaginateModel,
+  PipelineStage,
   QueryOptions,
   SaveOptions,
   UpdateQuery,
@@ -38,5 +39,9 @@ export abstract class BaseRepository<T> {
     options?: QueryOptions | null,
   ): Promise<T & Document> {
     return await this.model.findOneAndUpdate(filter, update, options);
+  }
+
+  async aggregate(pipeline: PipelineStage[]) {
+    return this.model.aggregate(pipeline);
   }
 }

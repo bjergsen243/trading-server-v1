@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as MongoosePaginate from 'mongoose-paginate-v2';
 import {
   ECurrencyType,
-  EPaymentStatus,
   EPaymentMethod,
+  EPaymentStatus,
 } from 'src/shared/enum/payment.enum';
 
 export type PaymentHistoryDocument = PaymentHistory & Document;
@@ -14,11 +14,14 @@ export class PaymentHistory {
     Object.assign(this, paymentHistory);
   }
 
+  @Prop({ name: 'user_id', required: true })
+  userId: string;
+
   @Prop({ name: 'account_id', required: true })
   accountId: string;
 
-  @Prop({ required: true })
-  to: string;
+  @Prop({ unique: true, required: true })
+  id: string;
 
   @Prop({ default: 0 })
   amount: number;
@@ -35,5 +38,6 @@ export class PaymentHistory {
 
 export const PaymentHistorySchema =
   SchemaFactory.createForClass(PaymentHistory);
-PaymentHistorySchema.index({ from: 1 }, { background: true });
+PaymentHistorySchema.index({ accountId: 1 }, { background: true });
+PaymentHistorySchema.index({ userId: 1 }, { background: true });
 PaymentHistorySchema.plugin(MongoosePaginate);
